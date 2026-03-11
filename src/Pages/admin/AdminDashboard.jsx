@@ -6,9 +6,22 @@ import { loanService } from "../../services/loanService";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { FileText, UserPlus, PlusCircle, Calculator, Download, TrendingUp, Clock, CheckCircle2, XCircle, Wallet } from "lucide-react";
+import { FileText, UserPlus, PlusCircle, Calculator, Download, TrendingUp, Clock, CheckCircle2, XCircle, Wallet , Tags } from "lucide-react";
 
 const PIE_COLORS = ["#f5b820", "#22c55e", "#ef4444", "#3b82f6"];
+
+const StatCard = ({ icon: Icon, label, value, accent, sub, delay }) => (
+    <div className={`glass glass-hover p-5 animate-fade-in-up ${delay}`}>
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-white/40 text-sm font-medium">{label}</p>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${accent || "bg-white/5"}`}>
+          <Icon size={16} className="text-white/80" />
+        </div>
+      </div>
+      <p className="text-white text-3xl font-bold font-['Outfit']">{value ?? "---"}</p>
+      {sub && <p className="text-white/25 text-xs mt-1">{sub}</p>}
+    </div>
+  );
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState(null);
@@ -73,18 +86,11 @@ export default function AdminDashboard() {
     doc.save("LoanFlow_Reporte.pdf");
   };
 
-  const StatCard = ({ icon: Icon, label, value, accent, sub, delay }) => (
-    <div className={`glass glass-hover p-5 animate-fade-in-up ${delay}`}>
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-white/40 text-sm font-medium">{label}</p>
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${accent || "bg-white/5"}`}>
-          <Icon size={16} className="text-white/80" />
-        </div>
-      </div>
-      <p className="text-white text-3xl font-bold font-['Outfit']">{value ?? "---"}</p>
-      {sub && <p className="text-white/25 text-xs mt-1">{sub}</p>}
-    </div>
-  );
+  
+
+  const disbursedText = stats?.totalAmountDisbursed
+    ? "S/ " + Number(stats.totalAmountDisbursed).toLocaleString("es-PE", { minimumFractionDigits: 2 })
+    : "S/ 0.00";
 
   return (
     <div className="bg-scene min-h-screen">
@@ -117,7 +123,7 @@ export default function AdminDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <StatCard icon={XCircle} label="Rechazados" value={stats?.rejectedLoans} accent="bg-red-500/10" delay="stagger-5" />
               <StatCard icon={Wallet} label="Total Desembolsado"
-                value={stats?.totalAmountDisbursed ? "S/ " + Number(stats.totalAmountDisbursed).toLocaleString("es-PE", { minimumFractionDigits: 2 }) : "S/ 0.00"}
+                value={disbursedText}
                 accent="bg-amber-500/10" delay="stagger-6" />
               <StatCard icon={Clock} label="Cuotas Vencidas" value={stats?.overdueInstallments} accent="bg-orange-500/10" sub="Sin pagar y con fecha pasada" delay="stagger-7" />
             </div>
@@ -156,7 +162,7 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {[
                   { to: "/admin/loans", icon: FileText, label: "Ver Prestamos" },
-                  { to: "/admin/register-client", icon: UserPlus, label: "Registrar Cliente" },
+                  { to: "/admin/loan-types", icon: Tags, label: "Tipos de Prestamo" },
                   { to: "/admin/create-loan", icon: PlusCircle, label: "Crear Prestamo" },
                   { to: "/simulator", icon: Calculator, label: "Simulador" },
                 ].map(({ to, icon: Icon, label }) => (

@@ -16,7 +16,8 @@ import AdminLoans from './Pages/admin/AdminLoans';
 import RegisterClient from './Pages/admin/RegisterClient';
 import CreateLoan from './Pages/admin/CreateLoan';
 import Clients from './Pages/admin/Clients';
-import PaymentHistory from './Pages/admin/PaymentHistory'; // NUEVO
+import PaymentHistory from './Pages/admin/PaymentHistory'; 
+import LoanTypes from './Pages/admin/LoanTypes'
 // Client pages
 import MyLoans from './Pages/client/MyLoans';
 import RequestLoan from './Pages/client/RequestLoan';
@@ -26,7 +27,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
 
-
+        <Route path="/admin/loan-types" element={<AdminRoute><LoanTypes /></AdminRoute>} />
         <Route path="/change-password" element={<PrivateRoute><ChangePassword /></PrivateRoute>} />
         <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
         {/* Simulator — solo autenticados */}
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="/admin/loans" element={<AdminRoute><AdminLoans /></AdminRoute>} />
         <Route path="/admin/register-client" element={<AdminRoute><RegisterClient /></AdminRoute>} />
         <Route path="/admin/create-loan" element={<AdminRoute><CreateLoan /></AdminRoute>} />
+        <Route path="/admin/payments" element={<AdminRoute><PaymentHistory /></AdminRoute>} />
         <Route path="/admin/clients" element={<AdminRoute><Clients /></AdminRoute>} />
 
         {/* Client routes */}
